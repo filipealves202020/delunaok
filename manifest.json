@@ -1,0 +1,23 @@
+{
+  "name": "ML Deluna - Registro de Pacotes",
+  "short_name": "ML Deluna",
+  "description": "Aplicativo para registro de pacotes e paradas",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#3e5c9b",
+  "icons": [
+    {
+      "src": "icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "orientation": "portrait",
+  "scope": "/"
+}

@@ -1,0 +1,189 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.logo {
+    display: block;
+    max-width: 150px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+    text-align: center;
+    color: #4CAF50;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ddd;
+}
+
+.tab-button {
+    flex: 1;
+    padding: 10px;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    border: none;
+    font-size: 16px;
+    transition: background-color 0.3s, color 0.3s;
+    border-radius: 8px 8px 0 0;
+}
+
+.tab-button.active {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+}
+
+.tab-content {
+    display: none;
+    padding-top: 20px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.form, .button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.form input,
+.form button {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.form button,
+.button-group button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.form button:hover,
+.button-group button:hover {
+    background-color: #45a049;
+}
+
+.total-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #e8f5e9;
+    border-left: 5px solid #4CAF50;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.total-info {
+    font-weight: bold;
+    color: #388e3c;
+    font-size: 16px;
+}
+
+.total-value {
+    font-size: 20px;
+    color: #2e7d32;
+}
+
+.table-container {
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+table thead tr {
+    background-color: #4CAF50;
+    color: white;
+    text-align: left;
+    font-weight: bold;
+}
+
+table th,
+table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.record-row:hover {
+    background-color: #e0e0e0;
+    cursor: pointer;
+}
+
+.actions button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+.add-btn { background-color: #4CAF50; color: white; }
+.edit-btn { background-color: #2196F3; color: white; }
+.delete-btn { background-color: #f44336; color: white; }
+
+/* Styles for pop-ups */
+.custom-popup-overlay, .observation-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    display: none;
+}
+
+.custom-popup-content, .observation-popup-content {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    max-width: 400px;
+    text-align: center;
+}
+
+.hidden-file-input {
+    display: none;
+}

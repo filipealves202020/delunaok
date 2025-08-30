@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Pacotes e Paradas - ML Deluna</title>
+    
+    <meta name="theme-color" content="#3e5c9b">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+        .logo {
+            display: block;
+            margin: 0 auto 10px;
+            width: 250px;
+            max-width: 100%;
+        }
+        h1 {
+            text-align: center;
+            color: #ffffff;
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+        h2 {
+            text-align: center;
+            color: #ffffff;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .tab-button {
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            border-bottom: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px 5px 0 0;
+            color: #e0e0e0;
+        }
+        .tab-button.active {
+            background-color: #3e5c9b;
+            color: white;
+            border-color: #3e5c9b;
+        }
+        .tab-content {
+            display: none;
+            padding-top: 20px;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .form-paradas {
+            justify-content: flex-start;
+        }
+        input, button {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+        }
+        button {
+            background-color: #3e5c9b;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #4b68a7;
+        }
+        .form-paradas input {
+            max-width: none;
+        }
+        .form-paradas button {
+            max-width: none;
+        }
+        .total-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #2a2a2a;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .total-info {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #e0e0e0;
+        }
+        .total-value {
+            color: #6a9bd2;
+        }
+        .total-insucesso {
+            color: #dc3545;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 8px;
+            border-bottom: 1px solid #444;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #3e5c9b;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+        #recordsTable th:nth-child(1),
+        #recordsTable td:nth-child(1) { width: 20%; }
+        #recordsTable th:nth-child(2),
+        #recordsTable td:nth-child(2) { width: 15%; }
+        #recordsTable th:nth-child(3),
+        #recordsTable td:nth-child(3) { width: 30%; }
+        #recordsTable th:nth-child(4),
+        #recordsTable td:nth-child(4) { width: 15%; text-align: center; }
+        #recordsTable th:nth-child(5),
+        #recordsTable td:nth-child(5) { width: 20%; text-align: right; }
+        #stopsTable th:nth-child(1),
+        #stopsTable td:nth-child(1) { width: 15%; }
+        #stopsTable th:nth-child(2),
+        #stopsTable td:nth-child(2) { width: 10%; text-align: center; }
+        #stopsTable th:nth-child(3),
+        #stopsTable td:nth-child(3) { width: 65%; }
+        #stopsTable th:nth-child(4),
+        #stopsTable td:nth-child(4) { width: 10%; text-align: center; }
+        #stopsTable th:nth-child(5),
+        #stopsTable td:nth-child(5) { width: 10%; text-align: center; }
+        .actions {
+            display: flex;
+            gap: 5px;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        .edit-btn, .delete-btn, .add-btn, .photo-btn {
+            padding: 6px 4px;
+            border-radius: 3px;
+            cursor: pointer;
+            border: none;
+            color: white;
+            font-weight: bold;
+        }
+        .add-btn {
+            background-color: #28a745;
+        }
+        .edit-btn {
+            background-color: #007bff;
+        }
+        .delete-btn {
+            background-color: #dc3545;
+        }
+        .photo-btn {
+            background-color: #ffc107;
+            font-size: 10px;
+        }
+        .observation-field {
+            width: 100%;
+            min-height: 30px;
+            box-sizing: border-box;
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            border: 1px solid #444;
+            border-radius: 5px;
+            padding: 8px;
+            font-family: Arial, sans-serif;
+            resize: vertical;
+            transition: background-color 0.3s ease;
+        }
+        .filled-observation {
+            background-color: #4a2c2c;
+        }
+        #total-date-filter {
+            text-align: right;
+        }
+        .stop-row.completed {
+            background-color: #2a3a2a;
+            opacity: 0.8;
+            text-decoration: line-through;
+        }
+        .stop-row.completed td {
+            color: #a0a0a0;
+        }
+        .completed-checkbox {
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .button-group button {
+            flex: 1;
+            min-width: 120px;
+        }
+        .hidden-file-input {
+            display: none;
+        }
+        .record-row {
+            cursor: pointer;
+        }
+        /* Estilos para os pop-ups customizados */
+        .custom-popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .custom-popup {
+            background-color: #1e1e1e;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            max-width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .custom-popup-content {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            max-width: 350px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+        .custom-popup-content h3 {
+            margin-top: 0;
+            color: #fff;
+            font-size: 1.5em;
+        }
+        .custom-popup-content p {
+            font-size: 1.2em;
+            color: #e0e0e0;
+        }
+        .custom-popup-details {
+            text-align: left;
+            padding: 0 10px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .custom-popup-details h3, .custom-popup-details h4 {
+            color: #3e5c9b;
+            margin: 10px 0 5px;
+        }
+        .custom-popup-details p {
+            font-size: 1em;
+            margin: 5px 0;
+        }
+        .custom-popup-details .value {
+            color: #6a9bd2;
+            font-weight: bold;
+        }
+        .custom-popup-details ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .custom-popup-details li {
+            margin-bottom: 8px;
+            padding: 5px;
+            border-radius: 5px;
+            background-color: #2a2a2a;
+        }
+        .gains-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .gains-table th, .gains-table td {
+            padding: 8px;
+            border: 1px solid #444;
+            text-align: left;
+        }
+        .gains-table th {
+            background-color: #3e5c9b;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+        .gains-table .week-total-row {
+            background-color: #2a2a2a;
+            font-weight: bold;
+            color: #6a9bd2;
+        }
+        /* Estilos para o pop-up de observações */
+        .observation-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .observation-popup-content {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            max-width: 350px;
+            width: 90%;
+            text-align: center;
+        }
+        .observation-popup-content h3 {
+            margin-top: 0;
+            color: #fff;
+        }
+        .observation-options {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .observation-options button {
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            border: 1px solid #444;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .observation-options button:hover {
+            background-color: #3e5c9b;
+        }
+        .observation-popup-content textarea {
+            width: 100%;
+            min-height: 80px;
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            border: 1px solid #444;
+            border-radius: 5px;
+            padding: 10px;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            resize: vertical;
+            margin-bottom: 10px;
+        }
+        .observation-popup-actions {
+            display: flex;
+            justify-content: space-around;
+            gap: 10px;
+        }
+        /* Estilos para o botão de fechar do pop-up de foto */
+        .close-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: #dc3545;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .close-btn:hover {
+            background-color: #c82333;
+        }
+        /* Estilos para o pop-up do teclado numérico e alerta */
+        .numeric-input {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            text-align: center;
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            border: 1px solid #444;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        .numeric-keyboard {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .numeric-keyboard button {
+            padding: 15px;
+            font-size: 18px;
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            border: 1px solid #444;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .numeric-keyboard button:hover {
+            background-color: #3e5c9b;
+        }
+        .numeric-keyboard button:nth-child(11) {
+            /* Botão Apagar */
+            background-color: #dc3545;
+        }
+        .numeric-keyboard button:nth-child(11):hover {
+            background-color: #c82333;
+        }
+        .numeric-keyboard button:nth-child(12) {
+            /* Botão Confirmar */
+            background-color: #28a745;
+        }
+        .numeric-keyboard button:nth-child(12):hover {
+            background-color: #218838;
+        }
+        .alert-popup-content h3 {
+            color: #dc3545;
+        }
+        .alert-popup-content p {
+            font-size: 1.2em;
+            color: #e0e0e0;
+            margin-bottom: 20px;
+        }
+        .alert-popup-content button {
+            background-color: #dc3545;
+            color: white;
+        }
+        .alert-popup-content button:hover {
+            background-color: #c82333;
+        }
+        @media (max-width: 600px) {
+            .company-name { font-size: 1.4em; }
+            h1 { font-size: 1.2em; }
+            .total-container { font-size: 1em; padding: 8px; }
+            input, button { font-size: 14px; padding: 10px; }
+            table { font-size: 12px; }
+            th, td { padding: 8px; }
+            #recordsTable th:nth-child(1), #recordsTable td:nth-child(1),
+            #recordsTable th:nth-child(2), #recordsTable td:nth-child(2),
+            #recordsTable th:nth-child(3), #recordsTable td:nth-child(3),
+            #recordsTable th:nth-child(4), #recordsTable td:nth-child(4),
+            #recordsTable th:nth-child(5), #recordsTable td:nth-child(5) { width: auto; }
+            #stopsTable th:nth-child(1), #stopsTable td:nth-child(1),
+            #stopsTable th:nth-child(2), #stopsTable td:nth-child(2),
+            #stopsTable th:nth-child(3), #stopsTable td:nth-child(3),
+            #stopsTable th:nth-child(4), #stopsTable td:nth-child(4),
+            #stopsTable th:nth-child(5), #stopsTable td:nth-child(5) { width: auto; }
+            .edit-btn, .delete-btn, .add-btn { padding: 4px 6px; font-size: 10px; }
+            .numeric-keyboard button {
+                padding: 10px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="IMG_20250816_204625.jpg" alt="Logo ML Deluna" class="logo">
+        <h1>Registros</h1>
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab('paradas', 0)">Paradas</button>
+            <button class="tab-button" onclick="openTab('pacotes', 1)">Pacotes</button>
+            <button class="tab-button" onclick="openTab('gains', 2)">Ganhos</button>
+        </div>
+        <div id="paradas" class="tab-content active">
+            <div class="form form-paradas">
+                <input type="text" id="stopNumber" placeholder="Número da Parada" readonly required>
+                <input type="text" id="quantity-paradas" placeholder="Quantidade de Pacotes" readonly required>
+                <button id="saveStopBtn" onclick="saveStopRecord()">Salvar Parada</button>
+            </div>
+            <div class="button-group">
+                <button id="finishRouteBtn" onclick="finishRoute()">Finalizar Rota</button>
+            </div>
+            <div class="total-container">
+                <div class="total-info">Quantidade total: <span id="totalStopsCount" class="total-value">0</span></div>
+            </div>
+            <div class="table-container">
+                <table id="stopsTable">
+                    <thead>
+                        <tr>
+                            <th>Parada</th>
+                            <th>QTD</th>
+                            <th>Observação</th>
+                            <th>Foto</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stopsTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+        <div id="pacotes" class="tab-content">
+            <div class="form">
+                <input type="date" id="date-pacotes" required>
+                <input type="number" id="quantity-pacotes" placeholder="Quantidade de Pacotes" required min="0">
+                <input type="text" id="route-pacotes" placeholder="Rota" required>
+                <input type="text" id="driver-pacotes" list="driver-list" placeholder="Nome do Motorista" required>
+                <datalist id="driver-list"></datalist>
+                <button onclick="addOrUpdateRecord()">Adicionar</button>
+            </div>
+            <div class="button-group">
+                <button onclick="exportData()">Exportar Dados</button>
+                <button onclick="document.getElementById('file-input').click()">Importar Dados</button>
+                <input type="file" id="file-input" accept=".json" class="hidden-file-input" onchange="importData(event)">
+            </div>
+            <div class="total-container">
+                <input type="date" id="total-date-filter">
+                <div class="total-info">Total de pacotes: <span id="totalPackagesCount" class="total-value">0</span></div>
+            </div>
+            <div class="table-container">
+                <table id="recordsTable">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Rota</th>
+                            <th>Motorista</th>
+                            <th>QTD</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </div>
+        <div id="gains" class="tab-content">
+            <h2>Ganhos por Semana</h2>
+            <div class="table-container">
+                <table class="gains-table">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Pacotes</th>
+                            <th>Ganhos (R$)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="gainsTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+        <div id="routeDetails" class="tab-content">
+            <h2>Detalhes da Rota: <span id="routeDetailsTitle"></span></h2>
+            <div class="total-container">
+                <div class="total-info">Total de pacotes: <span id="totalRouteDetailsCount" class="total-value">0</span></div>
+                <div class="total-info">Total de insucessos: <span id="totalInsucessoCount" class="total-value total-insucesso">0</span></div>
+            </div>
+            <div class="table-container">
+                <table id="detailsTable">
+                    <thead>
+                        <tr>
+                            <th>Parada</th>
+                            <th>QTD</th>
+                            <th>Observação</th>
+                            <th>Foto</th>
+                        </tr>
+                    </thead>
+                    <tbody id="routeDetailsTableBody"></tbody>
+                </table>
+            </div>
+            <button onclick="hideRouteDetails()">Voltar</button>
+        </div>
+    </div>
+    
+    <div id="customPopupOverlay" class="custom-popup-overlay">
+        <div class="custom-popup">
+            <div class="custom-popup-content">
+                <h3 id="popupDate"></h3>
+                <p id="popupValue"></p>
+                <div class="button-group">
+                    <button onclick="closeCustomPopup()">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="observationPopupOverlay" class="observation-popup">
+        <div class="observation-popup-content">
+            <h3>Observação da Parada</h3>
+            <div class="observation-options">
+                <button onclick="addObservationText('Mochila')">Mochila</button>
+                <button onclick="addObservationText('Grande')">Grande</button>
+            </div>
+            <textarea id="observationTextarea"></textarea>
+            <div class="observation-popup-actions">
+                <button onclick="saveObservation()">Salvar</button>
+                <button onclick="closeObservationPopup()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="fullPhotoPopupOverlay" class="custom-popup-overlay" onclick="closeFullPhotoPopup()">
+        <div class="custom-popup-content" onclick="event.stopPropagation();">
+            <img id="fullPhoto" src="" style="max-width: 90vw; max-height: 90vh; object-fit: contain;">
+            <span class="close-btn" onclick="closeFullPhotoPopup();">X</span>
+        </div>
+    </div>
+
+    <div id="numericKeyboardPopup" class="custom-popup-overlay" style="display: none;">
+        <div class="custom-popup-content">
+            <h3 id="numericKeyboardTitle">Digite o Número</h3>
+            <input type="text" id="numericInput" readonly class="numeric-input" value="0">
+            <div class="numeric-keyboard">
+                <button onclick="addNumericKey('1')">1</button>
+                <button onclick="addNumericKey('2')">2</button>
+                <button onclick="addNumericKey('3')">3</button>
+                <button onclick="addNumericKey('4')">4</button>
+                <button onclick="addNumericKey('5')">5</button>
+                <button onclick="addNumericKey('6')">6</button>
+                <button onclick="addNumericKey('7')">7</button>
+                <button onclick="addNumericKey('8')">8</button>
+                <button onclick="addNumericKey('9')">9</button>
+                <button onclick="addNumericKey('0')">0</button>
+                <button onclick="clearNumericInput()">Apagar</button>
+                <button onclick="confirmNumericInput()">Confirmar</button>
+            </div>
+            <span class="close-btn" onclick="closeNumericKeyboard()">X</span>
+        </div>
+    </div>
+
+    <div id="alertPopupOverlay" class="custom-popup-overlay" style="display: none;">
+        <div class="custom-popup-content alert-popup-content">
+            <h3>Atenção!</h3>
+            <p id="alertMessage"></p>
+            <button onclick="closeAlertPopup()">OK</button>
+        </div>
+    </div>
+
+    <script>
+        // Adicionado para PWA: Registrar o service worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('Service Worker registrado com escopo:', registration.scope);
+                    })
+                    .catch(error => {
+                        console.error('Falha ao registrar o Service Worker:', error);
+                    });
+            });
+        }
+
+        // Variável global para rastrear a aba ativa
+        let currentTabIndex = 0;
+        const tabNames = ['paradas', 'pacotes', 'gains'];
+
+        function openTab(tabName, tabIndex) {
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(tab => tab.classList.remove('active'));
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => button.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            
+            const button = document.querySelector(`.tab-button[onclick*="openTab('${tabName}')"]`);
+            if (button) {
+                button.classList.add('active');
+            }
+            
+            currentTabIndex = tabIndex;
+
+            if (tabName === 'gains') {
+                updateGainsTable();
+            }
+        }
+
+        let records = JSON.parse(localStorage.getItem('records')) || [];
+        let drivers = JSON.parse(localStorage.getItem('drivers')) || [];
+        let editIndex = -1;
+        const monthNames = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+        const dayNames = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+        
+        function formatDate(dateString) {
+            const date = new Date(dateString + 'T00:00:00');
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = monthNames[date.getMonth()];
+            const dayOfWeek = dayNames[date.getDay()];
+            return `${day} ${month}<br>(${dayOfWeek})`;
+        }
+
+        function formatFullDate(dateString) {
+            const date = new Date(dateString + 'T00:00:00');
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+
+        if (drivers.length === 0) {
+            drivers = ['Wagner', 'Fabrício Junho', 'Luciane', 'Tiago', 'Apolo', 'Anselmo Soares', 'Felipe Ramos', 'Fábio Sousa', 'Marllon Y', 'Renato Salustiano', 'Jefferson cruz', 'ISAAC', 'Fábio Imbá', 'Renato Mattos', 'Juan Cavalcante', 'Felipe Quaresma', 'Emanoel', 'Tais', 'Jonathan vilar', 'William Rastelli', 'Mônica', 'Pablo Henrique', 'Douglas', 'Izael', 'Fabio silva', 'Fabiola', 'Francisco A', 'Lorran', 'Jonh Jonh', 'Marcos F', 'Matheus M', 'Ludimila', 'José', 'Felipe.A', 'ROGER P', 'MATEUS', 'Jhonatan', 'renan M', 'Leandro de Jesus', 'Pablo F', 'Daniel', 'ruth', 'Romarioooooo'];
+            localStorage.setItem('drivers', JSON.stringify(drivers));
+        }
+
+        function populateDriverDatalist() {
+            const driverList = document.getElementById('driver-list');
+            driverList.innerHTML = '';
+            const uniqueDrivers = [...new Set(drivers)].sort();
+            uniqueDrivers.forEach(driver => {
+                const option = document.createElement('option');
+                option.value = driver;
+                driverList.appendChild(option);
+            });
+        }
+
+        function calculateTotalByDate(selectedDate) {
+            if (!selectedDate) {
+                const total = records.reduce((sum, record) => sum + Number(record.quantity), 0);
+                document.getElementById('totalPackagesCount').textContent = total;
+                return;
+            }
+            const total = records.filter(record => record.date === selectedDate).reduce((sum, record) => sum + Number(record.quantity), 0);
+            document.getElementById('totalPackagesCount').textContent = total;
+        }
+
+        function loadRecords() {
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
+            const sortedRecords = records.sort((a, b) => new Date(b.date) - new Date(a.date));
+            sortedRecords.forEach((record, index) => {
+                const row = document.createElement('tr');
+                row.classList.add('record-row');
+                row.onclick = () => showRouteDetails(record.date, record.route);
+                row.innerHTML = `
+                    <td>${formatDate(record.date)}</td>
+                    <td>${record.route || record.initials || ''}</td>
+                    <td>${record.driver}</td>
+                    <td><b>${record.quantity}</b></td>
+                    <td class="actions">
+                        <button class="add-btn" onclick="event.stopPropagation(); addQuantity(${index});">+</button>
+                        <button class="edit-btn" onclick="event.stopPropagation(); editRecord(${index});">E</button>
+                        <button class="delete-btn" onclick="event.stopPropagation(); deleteRecord(${index});">-</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+            calculateTotalByDate(document.getElementById('total-date-filter').value);
+            populateDriverDatalist();
+        }
+
+        function addOrUpdateRecord() {
+            const date = document.getElementById('date-pacotes').value;
+            const quantity = document.getElementById('quantity-pacotes').value;
+            const route = document.getElementById('route-pacotes').value;
+            const driver = document.getElementById('driver-pacotes').value;
+            if (!date || !quantity || !route || !driver) {
+                showAlert('Por favor, preencha todos os campos.');
+                return;
+            }
+            if (!drivers.includes(driver)) {
+                drivers.push(driver);
+                localStorage.setItem('drivers', JSON.stringify(drivers));
+                populateDriverDatalist();
+            }
+            const record = { date, quantity: Number(quantity), route, driver };
+            if (editIndex === -1) {
+                records.unshift(record);
+            } else {
+                const originalRecord = records[editIndex];
+                if (originalRecord.stopDetails) {
+                    record.stopDetails = originalRecord.stopDetails;
+                }
+                records[editIndex] = record;
+                editIndex = -1;
+            }
+            localStorage.setItem('records', JSON.stringify(records));
+            loadRecords();
+            clearFormPacotes();
+        }
+
+        function editRecord(index) {
+            const record = records[index];
+            document.getElementById('date-pacotes').value = record.date;
+            document.getElementById('quantity-pacotes').value = record.quantity;
+            document.getElementById('route-pacotes').value = record.route || record.initials || '';
+            document.getElementById('driver-pacotes').value = record.driver;
+            editIndex = index;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function addQuantity(index) {
+            const quantityToAdd = prompt("Quantos pacotes você deseja somar?");
+            if (quantityToAdd !== null && !isNaN(quantityToAdd) && quantityToAdd !== "") {
+                records[index].quantity = Number(records[index].quantity) + Number(quantityToAdd);
+                localStorage.setItem('records', JSON.stringify(records));
+                loadRecords();
+            } else if (quantityToAdd !== null) {
+                showAlert("Por favor, insira um número válido.");
+            }
+        }
+
+        function clearFormPacotes() {
+            document.getElementById('date-pacotes').value = '';
+            document.getElementById('quantity-pacotes').value = '';
+            document.getElementById('route-pacotes').value = '';
+            document.getElementById('driver-pacotes').value = '';
+        }
+
+        function deleteRecord(index) {
+            if (confirm('Tem certeza que deseja excluir este registro?')) {
+                records.splice(index, 1);
+                localStorage.setItem('records', JSON.stringify(records));
+                loadRecords();
+            }
+        }
+
+        document.getElementById('total-date-filter').addEventListener('change', (e) => {
+            calculateTotalByDate(e.target.value);
+        });
+
+        let stops = JSON.parse(localStorage.getItem('stops')) || [];
+        let editStopIndex = -1;
+        let currentObservationIndex = -1;
+
+        function saveStopRecord() {
+            const stopNumber = document.getElementById('stopNumber').value;
+            const quantity = document.getElementById('quantity-paradas').value;
+
+            if (!stopNumber || !quantity) {
+                showAlert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            const stopNumberExists = stops.some(stop => stop.stopNumber === Number(stopNumber) && stops.indexOf(stop) !== editStopIndex);
+            if (stopNumberExists) {
+                showAlert('Este número de parada já existe na lista. Por favor, edite a parada existente ou insira um novo número.');
+                return;
+            }
+
+            if (editStopIndex === -1) {
+                const record = { stopNumber: Number(stopNumber), quantity: Number(quantity), completed: false, observations: '', photo: '' };
+                stops.push(record);
+            } else {
+                stops[editStopIndex].stopNumber = Number(stopNumber);
+                stops[editStopIndex].quantity = Number(quantity);
+                editStopIndex = -1;
+                document.getElementById('saveStopBtn').textContent = 'Salvar Parada';
+            }
+            localStorage.setItem('stops', JSON.stringify(stops));
+            loadStopRecords();
+            clearFormParadas();
+        }
+
+        function loadStopRecords() {
+            const tableBody = document.getElementById('stopsTableBody');
+            tableBody.innerHTML = '';
+            stops.sort((a, b) => a.stopNumber - b.stopNumber);
+            stops.forEach((stop, index) => {
+                const row = document.createElement('tr');
+                row.classList.add('stop-row');
+                if (stop.completed) {
+                    row.classList.add('completed');
+                }
+                const observationClass = stop.observations.trim() !== '' ? 'filled-observation' : '';
+                const photoCellContent = stop.photo 
+                    ? `<span style="cursor:pointer;" onclick="showFullPhoto('${stop.photo}')">📸</span>` 
+                    : 'N/A';
+                row.innerHTML = `
+                    <td>${stop.stopNumber}</td>
+                    <td><b>${stop.quantity}</b></td>
+                    <td>
+                        <textarea class="observation-field ${observationClass}" readonly onclick="openObservationPopup(${index});">${stop.observations}</textarea>
+                    </td>
+                    <td style="text-align: center;">${photoCellContent}</td>
+                    <td class="actions">
+                        <input type="checkbox" class="completed-checkbox" ${stop.completed ? 'checked' : ''} onclick="event.stopPropagation(); toggleStopCompletion(${index});">
+                        <label for="photo-input-${index}" class="photo-btn">📷</label>
+                        <input type="file" id="photo-input-${index}" accept="image/*" capture="camera" class="hidden-file-input" onchange="handlePhotoCapture(${index}, event)">
+                        <button class="edit-btn" onclick="event.stopPropagation(); editStopRecord(${index});">E</button>
+                        <button class="delete-btn" onclick="event.stopPropagation(); deleteStopRecord(${index});">X</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+            const total = stops.reduce((sum, stop) => sum + (Number(stop.quantity) || 0), 0);
+            document.getElementById('totalStopsCount').textContent = total;
+        }
+
+        function handlePhotoCapture(index, event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                stops[index].photo = reader.result;
+                localStorage.setItem('stops', JSON.stringify(stops));
+                loadStopRecords();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function openObservationPopup(index) {
+            currentObservationIndex = index;
+            const currentObservation = stops[index].observations;
+            document.getElementById('observationTextarea').value = currentObservation;
+            document.getElementById('observationPopupOverlay').style.display = 'flex';
+        }
+
+        function closeObservationPopup() {
+            document.getElementById('observationPopupOverlay').style.display = 'none';
+        }
+
+        function addObservationText(text) {
+            const textarea = document.getElementById('observationTextarea');
+            const currentValue = textarea.value;
+            if (currentValue.includes(text)) {
+                const updatedValue = currentValue.split(', ').filter(t => t !== text).join(', ');
+                textarea.value = updatedValue;
+            } else {
+                textarea.value = currentValue ? `${currentValue}, ${text}` : text;
+            }
+        }
+
+        function saveObservation() {
+            const newObservation = document.getElementById('observationTextarea').value;
+            if (currentObservationIndex !== -1) {
+                stops[currentObservationIndex].observations = newObservation;
+                localStorage.setItem('stops', JSON.stringify(stops));
+                loadStopRecords();
+            }
+            closeObservationPopup();
+        }
+
+        function toggleStopCompletion(index) {
+            stops[index].completed = !stops[index].completed;
+            localStorage.setItem('stops', JSON.stringify(stops));
+            loadStopRecords();
+        }
+
+        function updateObservation(index, value) {
+            stops[index].observations = value;
+            localStorage.setItem('stops', JSON.stringify(stops));
+        }
+
+        function editStopRecord(index) {
+            const record = stops[index];
+            document.getElementById('stopNumber').value = record.stopNumber;
+            document.getElementById('quantity-paradas').value = record.quantity;
+            editStopIndex = index;
+            document.getElementById('saveStopBtn').textContent = 'Atualizar Parada';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function clearFormParadas() {
+            document.getElementById('stopNumber').value = '';
+            document.getElementById('quantity-paradas').value = '';
+        }
+
+        function deleteStopRecord(index) {
+            if (confirm('Tem certeza que deseja excluir este registro?')) {
+                stops.splice(index, 1);
+                localStorage.setItem('stops', JSON.stringify(stops));
+                loadStopRecords();
+            }
+        }
+
+        function finishRoute() {
+            if (stops.length === 0) {
+                showAlert('Não há paradas para finalizar.');
+                return;
+            }
+            const routeName = prompt('Digite o nome da rota a ser finalizada:');
+            if (!routeName) {
+                showAlert('A finalização da rota foi cancelada.');
+                return;
+            }
+            const recordToUpdate = records.find(record => record.route.toLowerCase() === routeName.toLowerCase());
+            if (!recordToUpdate) {
+                showAlert('Rota não encontrada. Verifique se o nome está correto.');
+                return;
+            }
+            let totalPackagesInStops = 0;
+            recordToUpdate.stopDetails = stops.map(stop => {
+                totalPackagesInStops += Number(stop.quantity) || 0;
+                const isFailed = !stop.completed || stop.observations.toLowerCase().includes('insuc');
+                return {
+                    stopNumber: stop.stopNumber,
+                    quantity: stop.quantity,
+                    observations: stop.observations,
+                    isFailed: isFailed,
+                    photo: stop.photo
+                };
+            });
+            recordToUpdate.quantity = totalPackagesInStops;
+            localStorage.setItem('records', JSON.stringify(records));
+            stops = [];
+            localStorage.setItem('stops', JSON.stringify(stops));
+            loadRecords();
+            loadStopRecords();
+            showAlert(`A rota "${routeName}" foi finalizada e os dados de paradas foram salvos.`);
+        }
+
+        function showRouteDetails(date, route) {
+            openTab('routeDetails', -1);
+            const record = records.find(rec => rec.date === date && rec.route === route);
+            document.getElementById('routeDetailsTitle').textContent = `${formatDate(record.date)} - Rota: ${record.route}`;
+            const detailsTableBody = document.getElementById('routeDetailsTableBody');
+            detailsTableBody.innerHTML = '';
+            let totalPackagesInStops = 0;
+            let failedCount = 0;
+            if (record.stopDetails && record.stopDetails.length > 0) {
+                record.stopDetails.forEach(stop => {
+                    const row = document.createElement('tr');
+                    totalPackagesInStops += Number(stop.quantity) || 0;
+                    if (stop.isFailed) {
+                        failedCount++;
+                        row.style.backgroundColor = 'rgba(220, 53, 69, 0.2)';
+                    }
+                    const photoCellContent = stop.photo 
+                        ? `<span style="cursor:pointer;" onclick="showFullPhoto('${stop.photo}')">📸</span>` 
+                        : 'N/A';
+                    row.innerHTML = `
+                        <td>${stop.stopNumber}</td>
+                        <td>${stop.quantity}</td>
+                        <td>${stop.observations || 'N/A'}</td>
+                        <td style="text-align: center;">${photoCellContent}</td>
+                    `;
+                    detailsTableBody.appendChild(row);
+                });
+            } else if (record.observations) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>N/A</td>
+                    <td>N/A</td>
+                    <td>${record.observations}</td>
+                `;
+                detailsTableBody.appendChild(row);
+            } else {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td colspan="3">Nenhum detalhe de parada para esta rota.</td>`;
+                detailsTableBody.appendChild(row);
+            }
+            document.getElementById('totalRouteDetailsCount').textContent = totalPackagesInStops;
+            document.getElementById('totalInsucessoCount').textContent = failedCount;
+        }
+
+        function hideRouteDetails() {
+            openTab('pacotes', 1);
+        }
+
+        function exportData() {
+            const data = {
+                records: records,
+                stops: stops,
+                drivers: drivers
+            };
+            const json = JSON.stringify(data, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'dados_deluna.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) {
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    if (importedData.records && importedData.stops && importedData.drivers) {
+                        records = importedData.records;
+                        stops = importedData.stops;
+                        drivers = importedData.drivers;
+                        localStorage.setItem('records', JSON.stringify(records));
+                        localStorage.setItem('stops', JSON.stringify(stops));
+                        localStorage.setItem('drivers', JSON.stringify(drivers));
+                        loadRecords();
+                        loadStopRecords();
+                        showAlert('Dados importados com sucesso!');
+                    } else {
+                        showAlert('Formato de arquivo JSON inválido. Por favor, selecione um arquivo válido.');
+                    }
+                } catch (error) {
+                    showAlert('Erro ao processar o arquivo. Certifique-se de que é um arquivo JSON válido.');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function showCustomPopup(date, value) {
+            document.getElementById('popupDate').textContent = `Data: ${date}`;
+            document.getElementById('popupValue').textContent = `R$ ${value}`;
+            document.getElementById('customPopupOverlay').style.display = 'flex';
+        }
+
+        function closeCustomPopup() {
+            document.getElementById('customPopupOverlay').style.display = 'none';
+        }
+
+        function getWeekStartDate(date) {
+            const d = new Date(date + 'T00:00:00');
+            const dayOfWeek = d.getDay();
+            const diff = d.getDate() - dayOfWeek;
+            return new Date(d.setDate(diff)).toISOString().slice(0, 10);
+        }
+
+        function updateGainsTable() {
+            const tableBody = document.getElementById('gainsTableBody');
+            tableBody.innerHTML = '';
+            
+            const dailyTotals = {};
+            records.forEach(record => {
+                if (!dailyTotals[record.date]) {
+                    dailyTotals[record.date] = { packages: 0, gains: 0 };
+                }
+                const packages = record.quantity;
+                const gains = packages * 2.50;
+                dailyTotals[record.date].packages += packages;
+                dailyTotals[record.date].gains += gains;
+            });
+            
+            const weeklyGains = {};
+            Object.keys(dailyTotals).forEach(dateString => {
+                const weekKey = getWeekStartDate(dateString);
+                
+                if (!weeklyGains[weekKey]) {
+                    weeklyGains[weekKey] = { total: 0, days: [] };
+                }
+                
+                weeklyGains[weekKey].total += dailyTotals[dateString].gains;
+                weeklyGains[weekKey].days.push({ 
+                    date: dateString, 
+                    packages: dailyTotals[dateString].packages, 
+                    gains: dailyTotals[dateString].gains 
+                });
+            });
+            
+            const sortedWeeks = Object.keys(weeklyGains).sort((a, b) => new Date(b) - new Date(a));
+            
+            sortedWeeks.forEach(weekKey => {
+                const weekData = weeklyGains[weekKey];
+                
+                weekData.days.sort((a, b) => new Date(b.date) - new Date(a.date)).forEach(day => {
+                    const dayRow = document.createElement('tr');
+                    dayRow.innerHTML = `
+                        <td>${formatDate(day.date)}</td>
+                        <td>${day.packages}</td>
+                        <td>R$ ${day.gains.toFixed(2).replace('.', ',')}</td>
+                    `;
+                    tableBody.appendChild(dayRow);
+                });
+                
+                const totalRow = document.createElement('tr');
+                totalRow.classList.add('week-total-row');
+                totalRow.innerHTML = `
+                    <td>Total da Semana</td>
+                    <td></td>
+                    <td>R$ ${weekData.total.toFixed(2).replace('.', ',')}</td>
+                `;
+                tableBody.appendChild(totalRow);
+            });
+        }
+
+        // Funções para o teclado numérico
+        let currentNumericValue = '';
+        let currentInputField = ''; // Rastreia qual campo está sendo editado ('stopNumber' ou 'quantity-paradas')
+
+        function openNumericKeyboard(fieldId) {
+            currentInputField = fieldId;
+            currentNumericValue = document.getElementById(fieldId).value || '0';
+            document.getElementById('numericInput').value = currentNumericValue;
+            document.getElementById('numericKeyboardTitle').textContent = fieldId === 'stopNumber' ? 'Digite o Número da Parada' : 'Digite a Quantidade';
+            document.getElementById('numericKeyboardPopup').style.display = 'flex';
+        }
+
+        function addNumericKey(key) {
+            currentNumericValue = currentNumericValue === '0' ? key : currentNumericValue + key;
+            document.getElementById('numericInput').value = currentNumericValue;
+        }
+
+        function clearNumericInput() {
+            currentNumericValue = '0';
+            document.getElementById('numericInput').value = currentNumericValue;
+        }
+
+        function confirmNumericInput() {
+            const value = parseInt(currentNumericValue);
+            if (value < 0 || isNaN(value)) {
+                showAlert('Por favor, insira um número válido.');
+                return;
+            }
+            document.getElementById(currentInputField).value = value;
+            
+            if (currentInputField === 'stopNumber') {
+                // Após confirmar o número da parada, foca no campo de quantidade
+                openNumericKeyboard('quantity-paradas');
+            } else if (currentInputField === 'quantity-paradas') {
+                // Após confirmar a quantidade, salva o registro automaticamente
+                saveStopRecord();
+                closeNumericKeyboard();
+                document.getElementById('stopNumber').focus();
+            }
+        }
+
+        function closeNumericKeyboard() {
+            document.getElementById('numericKeyboardPopup').style.display = 'none';
+            currentInputField = '';
+        }
+
+        let touchstartX = 0;
+        let touchendX = 0;
+        const swipeZone = document.querySelector('.container');
+        
+        swipeZone.addEventListener('touchstart', e => {
+            touchstartX = e.changedTouches[0].screenX;
+        });
+
+        swipeZone.addEventListener('touchend', e => {
+            touchendX = e.changedTouches[0].screenX;
+            handleGesture();
+        });
+
+        function handleGesture() {
+            const swipeDistance = touchendX - touchstartX;
+            const swipeThreshold = 75;
+
+            if (swipeDistance < -swipeThreshold) {
+                const nextIndex = (currentTabIndex + 1) % tabNames.length;
+                openTab(tabNames[nextIndex], nextIndex);
+            }
+            
+            if (swipeDistance > swipeThreshold) {
+                const prevIndex = (currentTabIndex - 1 + tabNames.length) % tabNames.length;
+                openTab(tabNames[prevIndex], prevIndex);
+            }
+        }
+        
+        function showFullPhoto(base64Image) {
+            document.getElementById('fullPhoto').src = base64Image;
+            document.getElementById('fullPhotoPopupOverlay').style.display = 'flex';
+        }
+
+        function closeFullPhotoPopup() {
+            document.getElementById('fullPhotoPopupOverlay').style.display = 'none';
+        }
+
+        // Funções para o pop-up de alerta customizado
+        function showAlert(message) {
+            document.getElementById('alertMessage').textContent = message;
+            document.getElementById('alertPopupOverlay').style.display = 'flex';
+        }
+
+        function closeAlertPopup() {
+            document.getElementById('alertPopupOverlay').style.display = 'none';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const today = new Date().toLocaleDateString('en-CA');
+            document.getElementById('total-date-filter').value = today;
+            document.getElementById('date-pacotes').value = today;
+            loadRecords();
+            loadStopRecords();
+            const totalPackagesElement = document.getElementById('totalPackagesCount');
+            totalPackagesElement.style.cursor = 'pointer';
+            totalPackagesElement.addEventListener('click', () => {
+                const selectedDate = document.getElementById('total-date-filter').value;
+                const totalPackages = parseInt(totalPackagesElement.textContent, 10);
+                if (!isNaN(totalPackages)) {
+                    const totalReais = totalPackages * 2.50;
+                    const dateDisplay = selectedDate ? new Date(selectedDate + 'T00:00:00').toLocaleDateString('pt-BR') : "Total Geral";
+                    showCustomPopup(dateDisplay, totalReais.toFixed(2).replace('.', ','));
+                }
+            });
+
+            // Adiciona eventos de click para abrir o teclado numérico
+            document.getElementById('stopNumber').addEventListener('click', (event) => {
+                event.preventDefault();
+                openNumericKeyboard('stopNumber');
+            });
+
+            document.getElementById('quantity-paradas').addEventListener('click', (event) => {
+                event.preventDefault();
+                openNumericKeyboard('quantity-paradas');
+            });
+
+            // Impedir entrada direta nos campos
+            document.getElementById('stopNumber').addEventListener('keydown', (event) => {
+                event.preventDefault();
+            });
+
+            document.getElementById('quantity-paradas').addEventListener('keydown', (event) => {
+                event.preventDefault();
+            });
+        });
+    </script>
+</body>
+</html>
+    
