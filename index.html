@@ -10,20 +10,152 @@
     <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
     
     <style>
+        /* Variável CSS para o tamanho da fonte dos números do teclado. */
+        :root {
+            --keypad-font-size: 36px;
+        }
+
         body {
             font-family: Arial, sans-serif;
             background-color: #121212;
             color: #e0e0e0;
             margin: 0;
             padding: 0;
+            transition: background-color 0.3s, color 0.3s;
         }
+        
+        /* Estilos do Tema Claro com 3 tons de cinza */
+        body.light-theme {
+            background-color: #f0f0f0; /* Fundo geral: cinza claro */
+            color: #333;
+        }
+        body.light-theme .container {
+            background-color: #f0f0f0; /* Fundo do container principal: cinza claro */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        body.light-theme .logo { filter: invert(0); }
+        body.light-theme h1, body.light-theme h2 { color: #333; }
+        body.light-theme .tab-button {
+            background-color: #C9E6E6; /* Cor verde-azulado mais clara para abas inativas */
+            color: #333;
+            border: 1px solid #ccc;
+        }
+        body.light-theme .tab-button.active {
+            background-color: #008080; /* Verde-azulado */
+            color: white;
+            border-color: #008080; /* Verde-azulado */
+        }
+        body.light-theme input, body.light-theme select {
+            background-color: #e9e9e9; /* Tom 3 - Fundo dos campos de entrada, seleção e botões */
+            color: #333;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        body.light-theme button { 
+            background-color: #008080; /* Verde-azulado */
+            color: white; 
+            border: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombreado para botões no tema claro */
+        }
+        body.light-theme button:hover {
+            background-color: #006666;
+        }
+        body.light-theme .total-container { background-color: #e9e9e9; } /* Tom 3 */
+        body.light-theme .total-info { color: #555; }
+        body.light-theme .table-container { background-color: #e0e0e0; } /* Fundo da tabela cinza */
+        
+        /* Adicionando sombreamento a todas as tabelas no tema claro */
+        body.light-theme table,
+        body.light-theme #stopsTable,
+        body.light-theme #recordsTable,
+        body.light-theme #completedStopsTable, /* Adicionado para a nova tabela */
+        body.light-theme .gains-table { 
+            background-color: #e0e0e0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Efeito de sombreamento */
+        }
+        
+        body.light-theme th { background-color: #008080; } /* Verde-azulado */
+        body.light-theme td { color: #333; border-bottom: 1px solid #ddd; }
+        body.light-theme .observation-field { 
+            background-color: #e9e9e9; 
+            color: #333; 
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        body.light-theme .filled-observation { background-color: #ffe8e8; }
+        body.light-theme .stop-row.completed { background-color: #d4edda; }
+        body.light-theme .stop-row.completed td { color: #666; }
+        body.light-theme .custom-popup-overlay .custom-popup-content, 
+        body.light-theme .numeric-keyboard button,
+        body.light-theme .observation-popup-content {
+            background-color: #F0F0F0;
+            color: #333;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        body.light-theme .custom-popup-content h3 {
+            color: #333;
+        }
+        body.light-theme .numeric-input,
+        body.light-theme .observation-popup-content textarea {
+            background-color: #e9e9e9; 
+            color: #333;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        body.light-theme .numeric-keyboard .numeric-key {
+            background-color: #e0e0e0; /* Tom 3 */
+        }
+        body.light-theme .numeric-keyboard .numeric-key:hover {
+            background-color: #008080; /* Verde-azulado */
+        }
+        body.light-theme .observation-options button {
+            background-color: #e9e9e9;
+            color: #333;
+            border: 1px solid #ccc;
+        }
+        body.light-theme .week-total-row {
+            background-color: #A8C5E7; /* Fundo azul claro para o total da semana no tema claro */
+            color: #333;
+        }
+        body.light-theme .gains-value-cell {
+            color: #008080;
+        }
+        body.light-theme .gains-table th, 
+        body.light-theme .gains-table td {
+            border: 1px solid #bbb; /* Corrigido: Bordas mais visíveis para o tema claro */
+        }
+        body.light-theme #gainsByMonthPopupContent h3 {
+            color: #333;
+        }
+        body.light-theme #gainsByMonthPopupContent th {
+            background-color: #ccc;
+            color: #333;
+        }
+        body.light-theme #gainsByMonthPopupContent td {
+            color: #333;
+        }
+        body.light-theme .settings-content button {
+            background-color: #008080; /* Verde-azulado */
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ----- CORREÇÃO APLICADA AQUI ----- */
+        body.light-theme .alert-popup-content p,
+        body.light-theme .custom-popup-content p {
+            color: #333;
+        }
+        /* ---------------------------------- */
+
+        /* Estilos do Tema Escuro com 3 tons de cinza */
         .container {
             max-width: 900px;
             margin: 20px auto;
             padding: 20px;
-            background-color: #1e1e1e;
+            background-color: #1e1e1e; /* Tom 2 - Fundo do container principal */
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            transition: background-color 0.3s, box-shadow 0.3s;
         }
         .logo {
             display: block;
@@ -49,7 +181,7 @@
             margin-bottom: 20px;
         }
         .tab-button {
-            background-color: #2a2a2a;
+            background-color: #2a2a2a; /* Tom 3 - Fundo dos botões de aba inativos */
             border: 1px solid #444;
             border-bottom: none;
             padding: 10px 20px;
@@ -57,11 +189,12 @@
             font-size: 16px;
             border-radius: 5px 5px 0 0;
             color: #e0e0e0;
+            transition: background-color 0.3s, color 0.3s;
         }
         .tab-button.active {
-            background-color: #3e5c9b;
+            background-color: #008080; /* Verde-azulado */
             color: white;
-            border-color: #3e5c9b;
+            border-color: #008080; /* Verde-azulado */
         }
         .tab-content {
             display: none;
@@ -85,18 +218,21 @@
             border: 1px solid #444;
             border-radius: 5px;
             font-size: 16px;
-            background-color: #2a2a2a;
+            background-color: #2a2a2a; /* Tom 3 - Fundo dos campos de entrada e seleção */
             color: #e0e0e0;
+            transition: background-color 0.3s, color 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         button {
-            background-color: #3e5c9b;
+            background-color: #008080; /* Verde-azulado */
             color: white;
             border: none;
             cursor: pointer;
             transition: background-color 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombreado para botões no tema escuro */
         }
         button:hover {
-            background-color: #4b68a7;
+            background-color: #006666;
         }
         .form-paradas input {
             max-width: none;
@@ -108,18 +244,21 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #2a2a2a;
+            background-color: #2a2a2a; /* Tom 3 */
             padding: 10px;
             border-radius: 5px;
             margin-bottom: 20px;
+            transition: background-color 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         .total-info {
             font-size: 1.2em;
             font-weight: bold;
             color: #e0e0e0;
+            transition: color 0.3s;
         }
         .total-value {
-            color: #6a9bd2;
+            color: #008080; /* Verde-azulado */
         }
         .total-insucesso {
             color: #dc3545;
@@ -127,11 +266,19 @@
         .table-container {
             overflow-x: auto;
         }
-        table {
+        
+        /* Adicionando sombreamento a todas as tabelas no tema escuro */
+        table,
+        #stopsTable,
+        #recordsTable,
+        #completedStopsTable, /* Adicionado para a nova tabela */
+        .gains-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
         }
+        
         th, td {
             padding: 8px;
             border-bottom: 1px solid #444;
@@ -139,7 +286,7 @@
             vertical-align: top;
         }
         th {
-            background-color: #3e5c9b;
+            background-color: #008080; /* Verde-azulado */
             color: white;
             position: sticky;
             top: 0;
@@ -164,6 +311,17 @@
         #stopsTable td:nth-child(4) { width: 10%; text-align: center; }
         #stopsTable th:nth-child(5),
         #stopsTable td:nth-child(5) { width: 10%; text-align: center; }
+        /* Adicionado para a nova tabela */
+        #completedStopsTable th:nth-child(1),
+        #completedStopsTable td:nth-child(1) { width: 15%; }
+        #completedStopsTable th:nth-child(2),
+        #completedStopsTable td:nth-child(2) { width: 10%; text-align: center; }
+        #completedStopsTable th:nth-child(3),
+        #completedStopsTable td:nth-child(3) { width: 65%; }
+        #completedStopsTable th:nth-child(4),
+        #completedStopsTable td:nth-child(4) { width: 10%; text-align: center; }
+        #completedStopsTable th:nth-child(5),
+        #completedStopsTable td:nth-child(5) { width: 10%; text-align: center; }
         .actions {
             display: flex;
             gap: 5px;
@@ -179,17 +337,21 @@
             font-weight: bold;
         }
         .add-btn {
-            background-color: #28a745;
+            background-color: #008080; /* Verde-azulado */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         .edit-btn {
-            background-color: #007bff;
+            background-color: #008080; /* Verde-azulado */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         .delete-btn {
             background-color: #dc3545;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         .photo-btn {
             background-color: #ffc107;
             font-size: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         .observation-field {
             width: 100%;
@@ -203,12 +365,10 @@
             font-family: Arial, sans-serif;
             resize: vertical;
             transition: background-color 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         .filled-observation {
             background-color: #4a2c2c;
-        }
-        #total-date-filter {
-            text-align: right;
         }
         .stop-row.completed {
             background-color: #2a3a2a;
@@ -271,7 +431,7 @@
             max-width: 350px;
             width: 90%;
             text-align: center;
-            position: relative; /* Adicionado para posicionamento relativo do botão de fechar */
+            position: relative;
         }
         .custom-popup-content h3 {
             margin-top: 0;
@@ -289,7 +449,7 @@
             overflow-y: auto;
         }
         .custom-popup-details h3, .custom-popup-details h4 {
-            color: #3e5c9b;
+            color: #008080; /* Verde-azulado */
             margin: 10px 0 5px;
         }
         .custom-popup-details p {
@@ -297,7 +457,7 @@
             margin: 5px 0;
         }
         .custom-popup-details .value {
-            color: #6a9bd2;
+            color: #008080; /* Verde-azulado */
             font-weight: bold;
         }
         .custom-popup-details ul {
@@ -317,11 +477,11 @@
         }
         .gains-table th, .gains-table td {
             padding: 8px;
-            border: 1px solid #444;
+            border: 1px solid #444; /* Corrigido: bordas mais finas */
             text-align: left;
         }
         .gains-table th {
-            background-color: #3e5c9b;
+            background-color: #008080; /* Verde-azulado */
             color: white;
             position: sticky;
             top: 0;
@@ -329,7 +489,7 @@
         .gains-table .week-total-row {
             background-color: #2a2a2a;
             font-weight: bold;
-            color: #6a9bd2;
+            color: #008080; /* Verde-azulado */
         }
         /* Estilos para o pop-up de observações */
         .observation-popup {
@@ -371,9 +531,10 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         .observation-options button:hover {
-            background-color: #3e5c9b;
+            background-color: #008080; /* Verde-azulado */
         }
         .observation-popup-content textarea {
             width: 100%;
@@ -387,6 +548,7 @@
             font-family: Arial, sans-serif;
             resize: vertical;
             margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         .observation-popup-actions {
             display: flex;
@@ -395,9 +557,9 @@
         }
         /* Estilos para o botão de fechar do pop-up de foto e teclado */
         .close-btn {
-            position: absolute; /* Certifique-se de que a posição é absoluta */
-            top: 10px; /* Posicionado no canto superior */
-            right: 10px; /* Posicionado no canto direito */
+            position: absolute;
+            top: 10px;
+            right: 10px;
             background-color: #dc3545;
             color: white;
             border-radius: 50%;
@@ -425,6 +587,7 @@
             border: 1px solid #444;
             border-radius: 5px;
             margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         .numeric-keyboard {
             display: grid;
@@ -433,8 +596,7 @@
             margin-bottom: 15px;
         }
         .numeric-keyboard button {
-            padding: 25px; /* Aumentado o padding para deixar os botões maiores */
-            font-size: 36px; /* Aumentado o tamanho da fonte dos números */
+            padding: 25px;
             font-weight: bold;
             background-color: #2a2a2a;
             color: #e0e0e0;
@@ -442,30 +604,14 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         .numeric-keyboard button:hover {
-            background-color: #3e5c9b;
+            background-color: #008080; /* Verde-azulado */
         }
-        /* Ajuste do layout para a última linha do teclado numérico */
-        .numeric-keyboard button:nth-child(10) {
-            /* Botão 0 - Agora posicionado no centro */
-            grid-column: 2 / span 1;
-        }
-        .numeric-keyboard button:nth-child(11) {
-            /* Botão Apagar */
-            background-color: #dc3545;
-            grid-column: 1 / span 1; /* Posicionado à esquerda */
-        }
-        .numeric-keyboard button:nth-child(11):hover {
-            background-color: #c82333;
-        }
-        .numeric-keyboard button:nth-child(12) {
-            /* Botão Confirmar */
-            background-color: #28a745;
-            grid-column: 3 / span 1; /* Posicionado à direita */
-        }
-        .numeric-keyboard button:nth-child(12):hover {
-            background-color: #218838;
+        /* Alteração para aplicar a fonte APENAS aos números */
+        .numeric-keyboard .numeric-key {
+            font-size: var(--keypad-font-size);
         }
         .alert-popup-content h3 {
             color: #dc3545;
@@ -478,6 +624,7 @@
         .alert-popup-content button {
             background-color: #dc3545;
             color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         .alert-popup-content button:hover {
             background-color: #c82333;
@@ -510,13 +657,93 @@
             color: #e0e0e0;
         }
         #gainsByMonthPopupContent .gains-value-cell {
-            color: #28a745;
+            color: #008080; /* Verde-azulado */
             font-weight: bold;
         }
         #gainsByMonthPopupContent button {
             width: 100%;
             margin-top: 20px;
-            background-color: #3e5c9b;
+            background-color: #008080; /* Verde-azulado */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        /* Alinhar a coluna de ganhos do pop-up de ganhos por mês à direita */
+        #gainsByMonthPopupContent .gains-table td:nth-child(2) {
+            text-align: right;
+        }
+        /* Estilos para o popup de configurações */
+        .settings-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            text-align: left;
+        }
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 10px;
+            background-color: #2a2a2a;
+            border-radius: 5px;
+        }
+        .setting-label {
+            font-size: 1.1em;
+            color: #e0e0e0;
+            white-space: nowrap;
+        }
+        /* Estilos para o slider de tema */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #008080; /* Verde-azulado */
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        .font-size-value {
+            min-width: 30px;
+            text-align: right;
+        }
+        .last-cache-date {
+            font-style: italic;
+            font-size: 0.9em;
+            color: #aaa;
+        }
+        /* Alinhamento da coluna de ganhos para a direita */
+        .gains-table th:last-child,
+        .gains-table td:last-child {
+            text-align: right;
         }
         @media (max-width: 600px) {
             .company-name { font-size: 1.4em; }
@@ -535,15 +762,23 @@
             #stopsTable th:nth-child(3), #stopsTable td:nth-child(3),
             #stopsTable th:nth-child(4), #stopsTable td:nth-child(4),
             #stopsTable th:nth-child(5), #stopsTable td:nth-child(5) { width: auto; }
+            /* Adicionado para a nova tabela */
+            #completedStopsTable th:nth-child(1), #completedStopsTable td:nth-child(1),
+            #completedStopsTable th:nth-child(2), #completedStopsTable td:nth-child(2),
+            #completedStopsTable th:nth-child(3), #completedStopsTable td:nth-child(3),
+            #completedStopsTable th:nth-child(4), #completedStopsTable td:nth-child(4),
+            #completedStopsTable th:nth-child(5), #completedStopsTable td:nth-child(5) { width: auto; }
             .edit-btn, .delete-btn, .add-btn { padding: 4px 6px; font-size: 10px; }
             .numeric-keyboard button {
                 padding: 15px;
-                font-size: 18px;
+            }
+            .numeric-keyboard .numeric-key {
+                font-size: var(--keypad-font-size);
             }
         }
     </style>
 </head>
-<body>
+<body class="light-theme">
     <div class="container">
         <img src="IMG_20250816_204625.jpg" alt="Logo ML Deluna" class="logo">
         <h1>Registros</h1>
@@ -558,9 +793,7 @@
                 <input type="text" id="quantity-paradas" placeholder="Quantidade de Pacotes" readonly required>
                 <button id="saveStopBtn" onclick="saveStopRecord()">Salvar Parada</button>
             </div>
-            <div class="button-group">
-                <button id="finishRouteBtn" onclick="finishRoute()">Finalizar Rota</button>
-            </div>
+            
             <div class="total-container">
                 <div class="total-info">Quantidade total: <span id="totalStopsCount" class="total-value">0</span></div>
             </div>
@@ -578,6 +811,23 @@
                     <tbody id="stopsTableBody"></tbody>
                 </table>
             </div>
+
+            <hr style="margin-top: 20px; border-color: #444;">
+            <h2 style="text-align: center; color: #333;">Paradas Concluídas</h2>
+            <div class="table-container">
+                <table id="completedStopsTable">
+                    <thead>
+                        <tr>
+                            <th>Parada</th>
+                            <th>QTD</th>
+                            <th>Observação</th>
+                            <th>Foto</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="completedStopsTableBody"></tbody>
+                </table>
+            </div>
         </div>
         <div id="pacotes" class="tab-content">
             <div class="form">
@@ -589,13 +839,7 @@
                 <button onclick="addOrUpdateRecord()">Adicionar</button>
             </div>
             <div class="button-group">
-                <button onclick="exportData()">Exportar Dados</button>
-                <button onclick="document.getElementById('file-input').click()">Importar Dados</button>
-                <input type="file" id="file-input" accept=".json" class="hidden-file-input" onchange="importData(event)">
-            </div>
-            <div class="total-container">
-                <input type="date" id="total-date-filter">
-                <div class="total-info">Total de pacotes: <span id="totalPackagesCount" class="total-value">0</span></div>
+                <button id="finishRouteBtn" onclick="finishRoute()">Finalizar Rota</button>
             </div>
             <div class="table-container">
                 <table id="recordsTable">
@@ -634,10 +878,6 @@
                     <option value="">Todos os Anos</option>
                 </select>
             </div>
-            <div class="button-group">
-                <button onclick="clearCache()">Limpar Cache</button>
-                <button onclick="clearServiceWorkerCache()">Limpar SW</button>
-            </div>
             <div class="table-container">
                 <table class="gains-table">
                     <thead>
@@ -671,6 +911,9 @@
                 </table>
             </div>
             <button onclick="hideRouteDetails()">Voltar</button>
+        </div>
+        <div class="button-group" style="justify-content: center; margin-top: 20px;">
+            <button onclick="openSettingsPopup()">Configurações</button>
         </div>
     </div>
     
@@ -741,22 +984,22 @@
 
     <div id="numericKeyboardPopup" class="custom-popup-overlay">
         <div class="custom-popup-content">
-            <h3 id="numericKeyboardTitle">Digite o Número</h3>
+            <h3 id="numericKeyboardTitle" style="color: #fff;">Digite o Número</h3>
             <span class="close-btn" onclick="closeNumericKeyboard()">X</span>
             <input type="text" id="numericInput" readonly class="numeric-input" value="0">
             <div class="numeric-keyboard">
-                <button onclick="addNumericKey('1')">1</button>
-                <button onclick="addNumericKey('2')">2</button>
-                <button onclick="addNumericKey('3')">3</button>
-                <button onclick="addNumericKey('4')">4</button>
-                <button onclick="addNumericKey('5')">5</button>
-                <button onclick="addNumericKey('6')">6</button>
-                <button onclick="addNumericKey('7')">7</button>
-                <button onclick="addNumericKey('8')">8</button>
-                <button onclick="addNumericKey('9')">9</button>
-                <button onclick="addNumericKey('0')">0</button>
-                <button onclick="clearNumericInput()">Apagar</button>
-                <button onclick="confirmNumericInput()">Confirmar</button>
+                <button class="numeric-key" onclick="addNumericKey('1')">1</button>
+                <button class="numeric-key" onclick="addNumericKey('2')">2</button>
+                <button class="numeric-key" onclick="addNumericKey('3')">3</button>
+                <button class="numeric-key" onclick="addNumericKey('4')">4</button>
+                <button class="numeric-key" onclick="addNumericKey('5')">5</button>
+                <button class="numeric-key" onclick="addNumericKey('6')">6</button>
+                <button class="numeric-key" onclick="addNumericKey('7')">7</button>
+                <button class="numeric-key" onclick="addNumericKey('8')">8</button>
+                <button class="numeric-key" onclick="addNumericKey('9')">9</button>
+                <button onclick="clearNumericInput()" style="background-color: #dc3545;">Apagar</button>
+                <button class="numeric-key" onclick="addNumericKey('0')">0</button>
+                <button onclick="confirmNumericInput()" style="background-color: #008080;">Confirmar</button>
             </div>
         </div>
     </div>
@@ -766,6 +1009,71 @@
             <h3>Atenção!</h3>
             <p id="alertMessage"></p>
             <button onclick="closeAlertPopup()">OK</button>
+        </div>
+    </div>
+
+    <div id="settingsPopupOverlay" class="custom-popup-overlay">
+        <div class="custom-popup-content">
+            <h3>Configurações</h3>
+            <div class="settings-content">
+                <div class="setting-item">
+                    <span class="setting-label">Tema Escuro/Claro</span>
+                    <label class="switch">
+                        <input type="checkbox" id="theme-toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">Tamanho da Fonte do Teclado:</span>
+                    <select id="fontSizeSelect">
+                        <option value="15">15px</option>
+                        <option value="16">16px</option>
+                        <option value="17">17px</option>
+                        <option value="18">18px</option>
+                        <option value="19">19px</option>
+                        <option value="20">20px</option>
+                        <option value="21">21px</option>
+                        <option value="22">22px</option>
+                        <option value="23">23px</option>
+                        <option value="24">24px</option>
+                        <option value="25">25px</option>
+                        <option value="26">26px</option>
+                        <option value="27">27px</option>
+                        <option value="28">28px</option>
+                        <option value="29">29px</option>
+                        <option value="30">30px</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">Dados:</span>
+                    <div class="button-group" style="width: 100%; margin-top: 10px;">
+                        <button onclick="exportData()">Exportar Dados</button>
+                        <button onclick="document.getElementById('file-input').click()">Importar Dados</button>
+                    </div>
+                    <input type="file" id="file-input" accept=".json" class="hidden-file-input" onchange="importData(event)">
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">Manutenção:</span>
+                    <div class="button-group" style="width: 100%; margin-top: 10px;">
+                        <button onclick="clearCache()">Limpar Cache</button>
+                        <button onclick="clearServiceWorkerCache()">Limpar SW</button>
+                    </div>
+                </div>
+                <div class="setting-item" style="flex-direction: column; align-items: flex-start;">
+                    <span class="setting-label">Último Salvamento:</span>
+                    <span id="lastCacheDate" class="last-cache-date">Nenhum dado salvo.</span>
+                </div>
+            </div>
+            <button onclick="closeSettingsPopup()" style="margin-top: 20px;">Fechar</button>
+        </div>
+    </div>
+    
+    <div id="selectRoutePopupOverlay" class="custom-popup-overlay">
+        <div class="custom-popup-content">
+            <h3>Selecione a Rota para Finalizar</h3>
+            <div id="activeRoutesList" style="text-align: left; margin-bottom: 20px;">
+            </div>
+            <button onclick="closeSelectRoutePopup()">Cancelar</button>
         </div>
     </div>
 
@@ -851,16 +1159,6 @@
             });
         }
 
-        function calculateTotalByDate(selectedDate) {
-            if (!selectedDate) {
-                const total = records.reduce((sum, record) => sum + Number(record.quantity), 0);
-                document.getElementById('totalPackagesCount').textContent = total;
-                return;
-            }
-            const total = records.filter(record => record.date === selectedDate).reduce((sum, record) => sum + Number(record.quantity), 0);
-            document.getElementById('totalPackagesCount').textContent = total;
-        }
-
         function loadRecords() {
             const tableBody = document.getElementById('tableBody');
             tableBody.innerHTML = '';
@@ -882,7 +1180,6 @@
                 `;
                 tableBody.appendChild(row);
             });
-            calculateTotalByDate(document.getElementById('total-date-filter').value);
             populateDriverDatalist();
         }
 
@@ -914,6 +1211,8 @@
             localStorage.setItem('records', JSON.stringify(records));
             loadRecords();
             clearFormPacotes();
+            // Salva a data do último cache
+            localStorage.setItem('lastCacheDate', new Date().toISOString());
         }
 
         function editRecord(index) {
@@ -952,10 +1251,6 @@
             }
         }
 
-        document.getElementById('total-date-filter').addEventListener('change', (e) => {
-            calculateTotalByDate(e.target.value);
-        });
-
         let stops = JSON.parse(localStorage.getItem('stops')) || [];
         let editStopIndex = -1;
         let currentObservationIndex = -1;
@@ -987,22 +1282,27 @@
             localStorage.setItem('stops', JSON.stringify(stops));
             loadStopRecords();
             clearFormParadas();
+            // Salva a data do último cache
+            localStorage.setItem('lastCacheDate', new Date().toISOString());
         }
 
         function loadStopRecords() {
-            const tableBody = document.getElementById('stopsTableBody');
-            tableBody.innerHTML = '';
+            const activeTableBody = document.getElementById('stopsTableBody');
+            const completedTableBody = document.getElementById('completedStopsTableBody');
+
+            activeTableBody.innerHTML = '';
+            completedTableBody.innerHTML = '';
+
             stops.sort((a, b) => a.stopNumber - b.stopNumber);
+
             stops.forEach((stop, index) => {
                 const row = document.createElement('tr');
-                row.classList.add('stop-row');
-                if (stop.completed) {
-                    row.classList.add('completed');
-                }
+                
                 const observationClass = stop.observations.trim() !== '' ? 'filled-observation' : '';
                 const photoCellContent = stop.photo 
                     ? `<span style="cursor:pointer;" onclick="showFullPhoto('${stop.photo}')">📸</span>` 
                     : 'N/A';
+                
                 row.innerHTML = `
                     <td>${stop.stopNumber}</td>
                     <td><b>${stop.quantity}</b></td>
@@ -1018,11 +1318,18 @@
                         <button class="delete-btn" onclick="event.stopPropagation(); deleteStopRecord(${index});">X</button>
                     </td>
                 `;
-                tableBody.appendChild(row);
+
+                if (stop.completed) {
+                    completedTableBody.appendChild(row);
+                } else {
+                    activeTableBody.appendChild(row);
+                }
             });
+
             const total = stops.reduce((sum, stop) => sum + (Number(stop.quantity) || 0), 0);
             document.getElementById('totalStopsCount').textContent = total;
         }
+
 
         function handlePhotoCapture(index, event) {
             const file = event.target.files[0];
@@ -1032,6 +1339,8 @@
                 stops[index].photo = reader.result;
                 localStorage.setItem('stops', JSON.stringify(stops));
                 loadStopRecords();
+                // Salva a data do último cache
+                localStorage.setItem('lastCacheDate', new Date().toISOString());
             };
             reader.readAsDataURL(file);
         }
@@ -1064,6 +1373,7 @@
                 stops[currentObservationIndex].observations = newObservation;
                 localStorage.setItem('stops', JSON.stringify(stops));
                 loadStopRecords();
+                localStorage.setItem('lastCacheDate', new Date().toISOString());
             }
             closeObservationPopup();
         }
@@ -1102,24 +1412,49 @@
         }
 
         function finishRoute() {
+            const activeRoutes = records.filter(rec => !rec.stopDetails);
+
+            if (activeRoutes.length === 0) {
+                showAlert('Não há rotas ativas para finalizar.');
+                return;
+            }
+
+            const activeRoutesList = document.getElementById('activeRoutesList');
+            activeRoutesList.innerHTML = '';
+            
+            activeRoutes.forEach(route => {
+                const button = document.createElement('button');
+                button.textContent = `${route.route} (${route.driver}) - ${formatFullDate(route.date)}`;
+                button.style.marginBottom = '10px';
+                button.style.width = '100%';
+                button.onclick = () => confirmAndSaveRoute(route.date, route.route);
+                activeRoutesList.appendChild(button);
+            });
+
+            document.getElementById('selectRoutePopupOverlay').style.display = 'flex';
+        }
+        
+        function closeSelectRoutePopup() {
+            document.getElementById('selectRoutePopupOverlay').style.display = 'none';
+        }
+
+        function confirmAndSaveRoute(date, routeName) {
             if (stops.length === 0) {
                 showAlert('Não há paradas para finalizar.');
                 return;
             }
-            const routeName = prompt('Digite o nome da rota a ser finalizada:');
-            if (!routeName) {
-                showAlert('A finalização da rota foi cancelada.');
-                return;
-            }
-            const recordToUpdate = records.find(record => record.route.toLowerCase() === routeName.toLowerCase());
+
+            const recordToUpdate = records.find(rec => rec.date === date && rec.route === routeName);
+
             if (!recordToUpdate) {
-                showAlert('Rota não encontrada. Verifique se o nome está correto.');
+                showAlert('Rota não encontrada. Verifique se o nome e a data estão corretos.');
                 return;
             }
+
             let totalPackagesInStops = 0;
             recordToUpdate.stopDetails = stops.map(stop => {
                 totalPackagesInStops += Number(stop.quantity) || 0;
-                const isFailed = !stop.completed || stop.observations.toLowerCase().includes('insuc');
+                const isFailed = !stop.completed || (stop.observations && stop.observations.toLowerCase().includes('insuc'));
                 return {
                     stopNumber: stop.stopNumber,
                     quantity: stop.quantity,
@@ -1130,11 +1465,16 @@
             });
             recordToUpdate.quantity = totalPackagesInStops;
             localStorage.setItem('records', JSON.stringify(records));
+
             stops = [];
             localStorage.setItem('stops', JSON.stringify(stops));
+            
             loadRecords();
             loadStopRecords();
+            
+            closeSelectRoutePopup();
             showAlert(`A rota "${routeName}" foi finalizada e os dados de paradas foram salvos.`);
+            localStorage.setItem('lastCacheDate', new Date().toISOString());
         }
 
         function showRouteDetails(date, route) {
@@ -1170,11 +1510,12 @@
                     <td>N/A</td>
                     <td>N/A</td>
                     <td>${record.observations}</td>
+                    <td style="text-align: center;">N/A</td>
                 `;
                 detailsTableBody.appendChild(row);
             } else {
                 const row = document.createElement('tr');
-                row.innerHTML = `<td colspan="3">Nenhum detalhe de parada para esta rota.</td>`;
+                row.innerHTML = `<td colspan="4">Nenhum detalhe de parada para esta rota.</td>`;
                 detailsTableBody.appendChild(row);
             }
             document.getElementById('totalRouteDetailsCount').textContent = totalPackagesInStops;
@@ -1222,6 +1563,7 @@
                         loadRecords();
                         loadStopRecords();
                         showAlert('Dados importados com sucesso!');
+                        localStorage.setItem('lastCacheDate', new Date().toISOString());
                     } else {
                         showAlert('Formato de arquivo JSON inválido. Por favor, selecione um arquivo válido.');
                     }
@@ -1329,7 +1671,7 @@
                     dayRow.innerHTML = `
                         <td>${formatDate(day.date)}</td>
                         <td>${day.packages}</td>
-                        <td>R$ ${day.gains.toFixed(2).replace('.', ',')}</td>
+                        <td class="gains-value-cell">R$ ${day.gains.toFixed(2).replace('.', ',')}</td>
                     `;
                     tableBody.appendChild(dayRow);
                 });
@@ -1487,48 +1829,78 @@
             });
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const today = new Date().toLocaleDateString('en-CA');
-            document.getElementById('total-date-filter').value = today;
-            document.getElementById('date-pacotes').value = today;
+       // Funções para o novo pop-up de configurações
+        function openSettingsPopup() {
+            const lastCacheDate = localStorage.getItem('lastCacheDate');
+            document.getElementById('lastCacheDate').textContent = lastCacheDate 
+                ? `Último salvamento: ${new Date(lastCacheDate).toLocaleString('pt-BR')}` 
+                : 'Nenhum dado salvo.';
+            document.getElementById('settingsPopupOverlay').style.display = 'flex';
+            
+            // Carregar configurações de tema
+            const isDarkTheme = document.body.classList.contains('dark-theme');
+            document.getElementById('theme-toggle').checked = isDarkTheme;
+            
+            // Carregar tamanho da fonte salvo
+            const savedFontSize = localStorage.getItem('keypadFontSize') || '36';
+            document.getElementById('fontSizeSelect').value = savedFontSize;
+            document.documentElement.style.setProperty('--keypad-font-size', `${savedFontSize}px`);
+        }
+
+        function closeSettingsPopup() {
+            document.getElementById('settingsPopupOverlay').style.display = 'none';
+        }
+
+        // Função para alternar tema claro/escuro
+        document.getElementById('theme-toggle').addEventListener('change', function() {
+            if (this.checked) {
+                document.body.classList.remove('light-theme');
+                document.body.classList.add('dark-theme');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.body.classList.remove('dark-theme');
+                document.body.classList.add('light-theme');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Função para atualizar o tamanho da fonte do teclado numérico
+        document.getElementById('fontSizeSelect').addEventListener('change', function() {
+            const fontSize = this.value;
+            document.documentElement.style.setProperty('--keypad-font-size', `${fontSize}px`);
+            localStorage.setItem('keypadFontSize', fontSize);
+        });
+
+        // Carregar tema salvo ao iniciar
+        window.addEventListener('load', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.classList.add(`${savedTheme}-theme`);
+            document.getElementById('theme-toggle').checked = savedTheme === 'dark';
+            
+            // Carregar tamanho da fonte salvo
+            const savedFontSize = localStorage.getItem('keypadFontSize') || '36';
+            document.documentElement.style.setProperty('--keypad-font-size', `${savedFontSize}px`);
+            document.getElementById('fontSizeSelect').value = savedFontSize;
+            
+            // Carregar dados iniciais
             loadRecords();
             loadStopRecords();
-            const totalPackagesElement = document.getElementById('totalPackagesCount');
-            totalPackagesElement.style.cursor = 'pointer';
-            totalPackagesElement.addEventListener('click', () => {
-                const selectedDate = document.getElementById('total-date-filter').value;
-                const totalPackages = parseInt(totalPackagesElement.textContent, 10);
-                if (!isNaN(totalPackages)) {
-                    const totalReais = totalPackages * 2.50;
-                    const dateDisplay = selectedDate ? new Date(selectedDate + 'T00:00:00').toLocaleDateString('pt-BR') : "Total Geral";
-                    showCustomPopup(dateDisplay, totalReais.toFixed(2).replace('.', ','));
-                }
-            });
-
-            // Adiciona eventos de click para abrir o teclado numérico
-            document.getElementById('stopNumber').addEventListener('click', (event) => {
-                event.preventDefault();
-                openNumericKeyboard('stopNumber');
-            });
-
-            document.getElementById('quantity-paradas').addEventListener('click', (event) => {
-                event.preventDefault();
-                openNumericKeyboard('quantity-paradas');
-            });
-
-            // Impedir entrada direta nos campos
-            document.getElementById('stopNumber').addEventListener('keydown', (event) => {
-                event.preventDefault();
-            });
-
-            document.getElementById('quantity-paradas').addEventListener('keydown', (event) => {
-                event.preventDefault();
-            });
-
-            // Adiciona os event listeners para os novos filtros
-            document.getElementById('month-filter').addEventListener('change', updateGainsTable);
-            document.getElementById('year-filter').addEventListener('change', updateGainsTable);
         });
+
+        // Adicionar eventos de clique para abrir o teclado numérico
+        document.getElementById('stopNumber').addEventListener('click', () => openNumericKeyboard('stopNumber'));
+        document.getElementById('quantity-paradas').addEventListener('click', () => openNumericKeyboard('quantity-paradas'));
+
+        // Atualizar a tabela de ganhos ao mudar o filtro de mês ou ano
+        document.getElementById('month-filter').addEventListener('change', updateGainsTable);
+        document.getElementById('year-filter').addEventListener('change', updateGainsTable);
+
+        // Função para inicializar a data padrão no campo de data da aba Pacotes
+        document.getElementById('date-pacotes').value = new Date().toLocaleDateString('en-CA');
+
+        // Garantir que a aba inicial seja carregada corretamente
+        openTab('paradas', 0);
     </script>
 </body>
 </html>
+    
