@@ -118,7 +118,7 @@
             color: #333;
         }
         body.light-theme .gains-value-cell {
-            color: #008080;
+            color: #000000;
         }
         body.light-theme .gains-table th, 
         body.light-theme .gains-table td {
@@ -143,6 +143,9 @@
         /* ----- CORREÇÃO APLICADA AQUI ----- */
         body.light-theme .alert-popup-content p,
         body.light-theme .custom-popup-content p {
+            color: #333;
+        }
+        body.light-theme .observation-popup-content h3 {
             color: #333;
         }
         /* ---------------------------------- */
@@ -836,7 +839,10 @@
                 <input type="text" id="route-pacotes" placeholder="Rota" required>
                 <input type="text" id="driver-pacotes" list="driver-list" placeholder="Nome do Motorista" required>
                 <datalist id="driver-list"></datalist>
-                <button onclick="addOrUpdateRecord()">Adicionar</button>
+                <button id="addOrUpdateBtn" onclick="addOrUpdateRecord()">Adicionar</button>
+            </div>
+            <div id="editStopsContainer" class="button-group" style="display: none;">
+                <button onclick="editStops()">Editar Paradas</button>
             </div>
             <div class="button-group">
                 <button id="finishRouteBtn" onclick="finishRoute()">Finalizar Rota</button>
@@ -892,7 +898,7 @@
             </div>
         </div>
         <div id="routeDetails" class="tab-content">
-            <h2>Detalhes da Rota: <span id="routeDetailsTitle"></span></h2>
+            <h2><span id="routeDetailsTitle"></span></h2>
             <div class="total-container">
                 <div class="total-info">Total de pacotes: <span id="totalRouteDetailsCount" class="total-value">0</span></div>
                 <div class="total-info">Total de insucessos: <span id="totalInsucessoCount" class="total-value total-insucesso">0</span></div>
@@ -1211,6 +1217,8 @@
             localStorage.setItem('records', JSON.stringify(records));
             loadRecords();
             clearFormPacotes();
+            document.getElementById('addOrUpdateBtn').textContent = 'Adicionar';
+            document.getElementById('editStopsContainer').style.display = 'none';
             // Salva a data do último cache
             localStorage.setItem('lastCacheDate', new Date().toISOString());
         }
@@ -1222,7 +1230,39 @@
             document.getElementById('route-pacotes').value = record.route || record.initials || '';
             document.getElementById('driver-pacotes').value = record.driver;
             editIndex = index;
+            document.getElementById('addOrUpdateBtn').textContent = 'Atualizar';
+            document.getElementById('editStopsContainer').style.display = record.stopDetails ? 'flex' : 'none';
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function editStops() {
+            if (editIndex !== -1) {
+                const recordToEdit = records[editIndex];
+                if (recordToEdit.stopDetails) {
+                    if (stops.length > 0) {
+                        showAlert('Existe paradas não finalizadas. Por favor, termine de preencher a parada antes de editar outra rota.');
+                        return;
+                    }
+                    stops = recordToEdit.stopDetails.map(stop => ({
+                        stopNumber: stop.stopNumber,
+                        quantity: stop.quantity,
+                        completed: !stop.isFailed,
+                        observations: stop.observations,
+                        photo: stop.photo || ''
+                    }));
+                    localStorage.setItem('stops', JSON.stringify(stops));
+                    loadStopRecords();
+                    openTab('paradas', 0);
+                    showAlert(`Dados da rota "${recordToEdit.route}" carregados na aba de paradas para edição.`);
+                    // Limpa o registro original para evitar duplicatas, mas mantém o "editIndex"
+                    records.splice(editIndex, 1);
+                    localStorage.setItem('records', JSON.stringify(records));
+                    loadRecords();
+                    clearFormPacotes();
+                } else {
+                    showAlert('Esta rota não tem detalhes de paradas para editar.');
+                }
+            }
         }
 
         function addQuantity(index) {
@@ -1480,7 +1520,7 @@
         function showRouteDetails(date, route) {
             openTab('routeDetails', -1);
             const record = records.find(rec => rec.date === date && rec.route === route);
-            document.getElementById('routeDetailsTitle').textContent = `${formatDate(record.date)} - Rota: ${record.route}`;
+            document.getElementById('routeDetailsTitle').textContent = `${formatFullDate(record.date)} - Rota: ${record.route}`;
             const detailsTableBody = document.getElementById('routeDetailsTableBody');
             detailsTableBody.innerHTML = '';
             let totalPackagesInStops = 0;
@@ -1903,4 +1943,3 @@
     </script>
 </body>
 </html>
-    
