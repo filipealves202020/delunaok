@@ -31,7 +31,7 @@
         }
         body.light-theme .container {
             background-color: #f0f0f0; /* Fundo do container principal: cinza claro */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Sombreado realçado */
         }
         body.light-theme .logo { filter: invert(0); }
         body.light-theme h1, body.light-theme h2 { color: #333; }
@@ -49,13 +49,13 @@
             background-color: #e9e9e9; /* Tom 3 - Fundo dos campos de entrada, seleção e botões */
             color: #333;
             border: 1px solid #ccc;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombreado realçado */
         }
         body.light-theme button { 
             background-color: #008080; /* Verde-azulado */
             color: white; 
             border: none;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombreado para botões no tema claro */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombreado realçado */
         }
         body.light-theme button:hover {
             background-color: #006666;
@@ -71,7 +71,7 @@
         body.light-theme #completedStopsTable, /* Adicionado para a nova tabela */
         body.light-theme .gains-table { 
             background-color: #e0e0e0;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Efeito de sombreamento */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Efeito de sombreamento realçado */
         }
         
         body.light-theme th { background-color: #008080; } /* Verde-azulado */
@@ -80,7 +80,7 @@
             background-color: #e9e9e9; 
             color: #333; 
             border: 1px solid #ccc;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombreado realçado */
         }
         body.light-theme .filled-observation { background-color: #ffe8e8; }
         body.light-theme .stop-row.completed { background-color: #d4edda; }
@@ -91,7 +91,7 @@
             background-color: #F0F0F0;
             color: #333;
             border: 1px solid #ccc;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Sombreado realçado */
         }
         body.light-theme .custom-popup-content h3 {
             color: #333;
@@ -100,7 +100,7 @@
         body.light-theme .observation-popup-content textarea {
             background-color: #e9e9e9; 
             color: #333;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombreado realçado */
         }
         body.light-theme .numeric-keyboard .numeric-key {
             background-color: #e0e0e0; /* Tom 3 */
@@ -114,8 +114,8 @@
             border: 1px solid #ccc;
         }
         body.light-theme .week-total-row {
-            background-color: #A8C5E7; /* Fundo azul claro para o total da semana no tema claro */
-            color: #333;
+            background-color: #008080; /* CORRIGIDO: Mesma cor dos botões para o tema claro */
+            color: white; /* Cor do texto alterada para branco */
         }
         body.light-theme .gains-value-cell {
             color: #000000;
@@ -123,6 +123,10 @@
         body.light-theme .gains-table th, 
         body.light-theme .gains-table td {
             border: 1px solid #bbb; /* Corrigido: Bordas mais visíveis para o tema claro */
+        }
+        body.light-theme #recordsTable th,
+        body.light-theme #recordsTable td {
+            border: 1px solid #bbb; /* CORRIGIDO: Adicionado para a tabela de pacotes */
         }
         body.light-theme #gainsByMonthPopupContent h3 {
             color: #333;
@@ -137,7 +141,7 @@
         body.light-theme .settings-content button {
             background-color: #008080; /* Verde-azulado */
             color: white;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombreado realçado */
         }
 
         /* ----- CORREÇÃO APLICADA AQUI ----- */
@@ -157,7 +161,7 @@
             padding: 20px;
             background-color: #1e1e1e; /* Tom 2 - Fundo do container principal */
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6); /* Sombreado realçado */
             transition: background-color 0.3s, box-shadow 0.3s;
         }
         .logo {
@@ -224,7 +228,7 @@
             background-color: #2a2a2a; /* Tom 3 - Fundo dos campos de entrada e seleção */
             color: #e0e0e0;
             transition: background-color 0.3s, color 0.3s;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Sombreado realçado */
         }
         button {
             background-color: #008080; /* Verde-azulado */
@@ -232,7 +236,7 @@
             border: none;
             cursor: pointer;
             transition: background-color 0.3s;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombreado para botões no tema escuro */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Sombreado realçado */
         }
         button:hover {
             background-color: #006666;
@@ -252,7 +256,7 @@
             border-radius: 5px;
             margin-bottom: 20px;
             transition: background-color 0.3s;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Sombreado realçado */
         }
         .total-info {
             font-size: 1.2em;
@@ -279,7 +283,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6); /* Sombreado realçado */
         }
         
         th, td {
@@ -341,20 +345,20 @@
         }
         .add-btn {
             background-color: #008080; /* Verde-azulado */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Sombreado realçado */
         }
         .edit-btn {
             background-color: #008080; /* Verde-azulado */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Sombreado realçado */
         }
         .delete-btn {
             background-color: #dc3545;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Sombreado realçado */
         }
         .photo-btn {
             background-color: #ffc107;
             font-size: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Sombreado realçado */
         }
         .observation-field {
             width: 100%;
@@ -368,7 +372,7 @@
             font-family: Arial, sans-serif;
             resize: vertical;
             transition: background-color 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Sombreado realçado */
         }
         .filled-observation {
             background-color: #4a2c2c;
@@ -430,7 +434,7 @@
             background-color: #1e1e1e;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6); /* Sombreado realçado */
             max-width: 350px;
             width: 90%;
             text-align: center;
@@ -490,9 +494,9 @@
             top: 0;
         }
         .gains-table .week-total-row {
-            background-color: #2a2a2a;
+            background-color: #008080; /* CORRIGIDO: Mesma cor dos botões para o tema escuro */
             font-weight: bold;
-            color: #008080; /* Verde-azulado */
+            color: white; /* Cor do texto alterada para branco */
         }
         /* Estilos para o pop-up de observações */
         .observation-popup {
@@ -511,7 +515,7 @@
             background-color: #1e1e1e;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6); /* Sombreado realçado */
             max-width: 350px;
             width: 90%;
             text-align: center;
@@ -534,7 +538,7 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.2s;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Sombreado realçado */
         }
         .observation-options button:hover {
             background-color: #008080; /* Verde-azulado */
@@ -551,7 +555,7 @@
             font-family: Arial, sans-serif;
             resize: vertical;
             margin-bottom: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Sombreado realçado */
         }
         .observation-popup-actions {
             display: flex;
@@ -590,7 +594,7 @@
             border: 1px solid #444;
             border-radius: 5px;
             margin-bottom: 15px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Sombreado realçado */
         }
         .numeric-keyboard {
             display: grid;
@@ -607,7 +611,7 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.2s;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Sombreado realçado */
         }
         .numeric-keyboard button:hover {
             background-color: #008080; /* Verde-azulado */
@@ -627,7 +631,7 @@
         .alert-popup-content button {
             background-color: #dc3545;
             color: white;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Sombreado realçado */
         }
         .alert-popup-content button:hover {
             background-color: #c82333;
@@ -667,7 +671,7 @@
             width: 100%;
             margin-top: 20px;
             background-color: #008080; /* Verde-azulado */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Sombreado realçado */
         }
         /* Alinhar a coluna de ganhos do pop-up de ganhos por mês à direita */
         #gainsByMonthPopupContent .gains-table td:nth-child(2) {
@@ -835,7 +839,7 @@
         <div id="pacotes" class="tab-content">
             <div class="form">
                 <input type="date" id="date-pacotes" required>
-                <input type="number" id="quantity-pacotes" placeholder="Quantidade de Pacotes" required min="0">
+                <input type="text" id="quantity-pacotes" placeholder="Quantidade de Pacotes" readonly required>
                 <input type="text" id="route-pacotes" placeholder="Rota" required>
                 <input type="text" id="driver-pacotes" list="driver-list" placeholder="Nome do Motorista" required>
                 <datalist id="driver-list"></datalist>
@@ -1254,11 +1258,15 @@
                     loadStopRecords();
                     openTab('paradas', 0);
                     showAlert(`Dados da rota "${recordToEdit.route}" carregados na aba de paradas para edição.`);
-                    // Limpa o registro original para evitar duplicatas, mas mantém o "editIndex"
-                    records.splice(editIndex, 1);
+                    
+                    // --- ALTERAÇÃO APLICADA AQUI: ZERAR A QUANTIDADE NA LINHA DA ROTA ---
+                    recordToEdit.quantity = 0;
+                    delete recordToEdit.stopDetails; // Remove os detalhes para que possa ser finalizada novamente
                     localStorage.setItem('records', JSON.stringify(records));
                     loadRecords();
                     clearFormPacotes();
+                    // ------------------------------------------------------------------
+
                 } else {
                     showAlert('Esta rota não tem detalhes de paradas para editar.');
                 }
@@ -1710,8 +1718,8 @@
                     const dayRow = document.createElement('tr');
                     dayRow.innerHTML = `
                         <td>${formatDate(day.date)}</td>
-                        <td>${day.packages}</td>
-                        <td class="gains-value-cell">R$ ${day.gains.toFixed(2).replace('.', ',')}</td>
+                        <td><b>${day.packages}</b></td>
+                        <td class="gains-value-cell"><b>R$ ${day.gains.toFixed(2).replace('.', ',')}</b></td>
                     `;
                     tableBody.appendChild(dayRow);
                 });
@@ -1721,7 +1729,7 @@
                 totalRow.innerHTML = `
                     <td>Total da Semana</td>
                     <td></td>
-                    <td>R$ ${weekData.total.toFixed(2).replace('.', ',')}</td>
+                    <td><b>R$ ${weekData.total.toFixed(2).replace('.', ',')}</b></td>
                 `;
                 tableBody.appendChild(totalRow);
             });
@@ -1790,6 +1798,8 @@
                 saveStopRecord();
                 closeNumericKeyboard();
                 document.getElementById('stopNumber').focus();
+            } else if (currentInputField === 'quantity-pacotes') {
+                closeNumericKeyboard();
             }
         }
 
@@ -1882,7 +1892,7 @@
             document.getElementById('theme-toggle').checked = isDarkTheme;
             
             // Carregar tamanho da fonte salvo
-            const savedFontSize = localStorage.getItem('keypadFontSize') || '36';
+            const savedFontSize = localStorage.getItem('keypadFontSize') || '24'; // ALTERADO PARA 24
             document.getElementById('fontSizeSelect').value = savedFontSize;
             document.documentElement.style.setProperty('--keypad-font-size', `${savedFontSize}px`);
         }
@@ -1918,7 +1928,7 @@
             document.getElementById('theme-toggle').checked = savedTheme === 'dark';
             
             // Carregar tamanho da fonte salvo
-            const savedFontSize = localStorage.getItem('keypadFontSize') || '36';
+            const savedFontSize = localStorage.getItem('keypadFontSize') || '24';
             document.documentElement.style.setProperty('--keypad-font-size', `${savedFontSize}px`);
             document.getElementById('fontSizeSelect').value = savedFontSize;
             
@@ -1930,6 +1940,7 @@
         // Adicionar eventos de clique para abrir o teclado numérico
         document.getElementById('stopNumber').addEventListener('click', () => openNumericKeyboard('stopNumber'));
         document.getElementById('quantity-paradas').addEventListener('click', () => openNumericKeyboard('quantity-paradas'));
+        document.getElementById('quantity-pacotes').addEventListener('click', () => openNumericKeyboard('quantity-pacotes'));
 
         // Atualizar a tabela de ganhos ao mudar o filtro de mês ou ano
         document.getElementById('month-filter').addEventListener('change', updateGainsTable);
@@ -1943,3 +1954,4 @@
     </script>
 </body>
 </html>
+    
