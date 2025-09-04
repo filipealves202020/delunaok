@@ -49,7 +49,7 @@
             background-color: #e9e9e9; /* Tom 3 - Fundo dos campos de entrada, seleção e botões */
             color: #333;
             border: 1px solid #ccc;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombreado realçado */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Sombreado AUMENTADO */
         }
         body.light-theme button { 
             background-color: #008080; /* Verde-azulado */
@@ -72,6 +72,11 @@
         body.light-theme .gains-table { 
             background-color: #e0e0e0;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Efeito de sombreamento realçado */
+        }
+
+        /* CORREÇÃO APLICADA: COR DE FUNDO DA TABELA DE PARADAS CONCLUÍDAS NO TEMA CLARO */
+        body.light-theme #completedStopsTable {
+            background-color: #90b8b8; /* Cinza verde azulado */
         }
         
         body.light-theme th { background-color: #008080; } /* Verde-azulado */
@@ -113,10 +118,13 @@
             color: #333;
             border: 1px solid #ccc;
         }
+
+        /* CORREÇÃO APLICADA: COR DA FONTE DA LINHA DE TOTAL DA SEMANA NO TEMA CLARO */
         body.light-theme .week-total-row {
-            background-color: #008080; /* CORRIGIDO: Mesma cor dos botões para o tema claro */
+            background-color: #008080; /* Mesma cor dos botões para o tema claro */
             color: white; /* Cor do texto alterada para branco */
         }
+        
         body.light-theme .gains-value-cell {
             color: #000000;
         }
@@ -353,7 +361,7 @@
         }
         .delete-btn {
             background-color: #dc3545;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Sombreado realçado */
+            box-shadow: 0 4-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Sombreado realçado */
         }
         .photo-btn {
             background-color: #ffc107;
