@@ -22,6 +22,11 @@
             margin: 0;
             padding: 0;
             transition: background-color 0.3s, color 0.3s;
+            /* CÓDIGO ADICIONADO AQUI */
+            background-image: url("IMG_20250904_132819.png");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
         }
         
         /* Estilos do Tema Claro com 3 tons de cinza */
@@ -30,7 +35,8 @@
             color: #333;
         }
         body.light-theme .container {
-            background-color: #f0f0f0; /* Fundo do container principal: cinza claro */
+            /* ALTERADO: Fundo do container principal com 40% de transparência */
+            background-color: rgba(240, 240, 240, 0.6); 
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Sombreado realçado */
         }
         body.light-theme .logo { filter: invert(0); }
@@ -167,7 +173,8 @@
             max-width: 900px;
             margin: 20px auto;
             padding: 20px;
-            background-color: #1e1e1e; /* Tom 2 - Fundo do container principal */
+            /* ALTERADO: Fundo do container principal com 40% de transparência */
+            background-color: rgba(30, 30, 30, 0.6); 
             border-radius: 10px;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6); /* Sombreado realçado */
             transition: background-color 0.3s, box-shadow 0.3s;
